@@ -8,10 +8,10 @@ WORKDIR /app
 COPY src/package*.json ./
 
 # Install dependencies
-RUN npm install
+RUN npm install --production --slient
 
 # Copy the entire project into the container
-COPY . .
+COPY src/. .
 
 # Expose the port the app runs on
 EXPOSE 3000
