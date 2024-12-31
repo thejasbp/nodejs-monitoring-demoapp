@@ -10,7 +10,7 @@ on:
 
 env:
   # IMAGE_REG: ghcr.io
-  IMAGE_REPO: thejasbp/nodejsgitactions
+  IMAGE_NAME: ${{ secrets.DOCKER_USERNAME }}/nodejsgitactions
 
 permissions:
   packages: write 
@@ -57,7 +57,7 @@ jobs:
           file: ./build/Dockerfile
           push: true
           tags: |
-            ${{ secrets.DOCKER_USERNAME }}/nodejsgitactions:v${{ github.run_number }}
+            ${{ env.IMAGE_NAME }}:v${{ github.run_number }}
 
 
 
