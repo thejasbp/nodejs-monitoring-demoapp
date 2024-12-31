@@ -1,8 +1,8 @@
 version: 2.1
 
-environment:
-  IMAGE_NAME= thejasbp/nodejscircleci
-  IMAGE_TAG= v1
+# environment:
+#   IMAGE_NAME= thejasbp/nodejscircleci
+#   IMAGE_TAG= v1
 
 executors:
   node-executor:
@@ -51,8 +51,8 @@ jobs:
   build:
     executor: docker-executor
     environment:
-      IMAGE_NAME=thejasbp/nodejscircleci
-      IMAGE_TAG=v1
+      IMAGE_NAME= thejasbp/nodejscircleci
+      IMAGE_TAG= v1
     steps:
       - checkout
       - setup_remote_docker:
