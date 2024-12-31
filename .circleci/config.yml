@@ -85,7 +85,7 @@ workflows:
       - test:
           requires:
             - lint
-      - build
+      - build:
           requires:
             - test
       - push:
