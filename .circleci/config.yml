@@ -7,7 +7,7 @@ environment:
 executors:
   node-executor:
     docker:
-      - image: circleci/node:16.20-browsers
+      - image: circleci/node:7.7.4
     working_directory: ~/nodejs-demoapp
 
   docker-executor:
