@@ -55,10 +55,16 @@ jobs:
       - setup_remote_docker:
           docker_layer_caching: true
       - run:
+        name: Debug Image Variables
+        command: echo "IMAGE_NAME=${IMAGE_NAME}, IMAGE_TAG=${IMAGE_TAG}"
+    
+      - run:
+          name: Docker Login
+          command: echo "$registry_pass" | docker login --username "$registry_user" --password-stdin
+      
+      - run:
           name: Build Docker Image
-          command: | 
-            echo $registry_pass | docker login -u $registry_user --password-stdin |
-            docker build -t $IMAGE_NAME:$IMAGE_TAG .
+          command: docker build -t "${IMAGE_NAME}:${IMAGE_TAG}" .
 
   push:
     executor: docker-executor
