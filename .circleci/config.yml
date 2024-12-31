@@ -57,7 +57,7 @@ jobs:
       - run:
           name: Build Docker Image
           command: | 
-            echo $registry_pass | docker login -u $registry_user --password-stdin
+            echo $registry_pass | docker login -u $registry_user --password-stdin |
             docker build -t $IMAGE_NAME:$IMAGE_TAG .
 
   push:
@@ -69,7 +69,7 @@ jobs:
       - run:
           name: Push Docker Image
           command: |
-            docker login -u $registry_user -p $registry_pass
+            docker login -u $registry_user -p $registry_pass 
             docker push ${IMAGE_NAME}:${IMAGE_TAG}
 
 workflows:
