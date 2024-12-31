@@ -25,10 +25,11 @@ jobs:
             - npm-cache-{{ checksum "src/package-lock.json" }}
       - run:
           name: Install Dependencies
-          command: make $(SRC_DIR)/node_modules
+          command: make src/node_modules
       - save_cache:
           paths:
             - src/node_modules
+          key: npm-cache-{{ checksum "src/package-lock.json" }}
       - run:
           name: Run Lint
           command: make lint
