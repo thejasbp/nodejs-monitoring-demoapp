@@ -57,7 +57,7 @@ jobs:
           file: ./build/Dockerfile
           push: true
           tags: |
-            ${{ secrets.DOCKER_USERNAME }}/${IMAGE_REPO}:v${{ github.run_number }}
+            ${{ secrets.DOCKER_USERNAME }}/${{ env.IMAGE_REPO}}:v${{ github.run_number }}
 
 
 
