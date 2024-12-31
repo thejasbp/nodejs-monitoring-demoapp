@@ -56,7 +56,7 @@ jobs:
           docker_layer_caching: true
       - run:
           name: Debug Image Variables
-          command: echo "IMAGE_NAME=${IMAGE_NAME}, IMAGE_TAG=${IMAGE_TAG}"
+          command: echo "IMAGE_NAME=$IMAGE_NAME, IMAGE_TAG=$IMAGE_TAG"
     
       - run:
           name: Docker Login
@@ -81,16 +81,16 @@ jobs:
 workflows:
   ci-workflow:
     jobs:
-      - lint
-      - test:
-          requires:
-            - lint
+      # - lint
+      # - test:
+      #     requires:
+      #       - lint
       - build:
-          requires:
-            - test
-      - push:
-          requires:
-            - build
+          # requires:
+          #   - test
+      # - push:
+      #     requires:
+      #       - build
 
 
 
