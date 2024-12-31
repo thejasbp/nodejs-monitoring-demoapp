@@ -25,7 +25,7 @@ jobs:
             - npm-cache-{{ checksum "src/package-lock.json" }}
       - run:
           name: Install Dependencies
-          command: make src/node_modules
+          command: make $(SRC_DIR)/node_modules
       - save_cache:
           paths:
             - src/node_modules
