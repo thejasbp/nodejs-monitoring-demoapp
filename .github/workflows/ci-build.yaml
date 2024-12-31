@@ -57,7 +57,7 @@ jobs:
           file: ./build/Dockerfile
           push: true
           tags: |
-            ${{ secrets.DOCKER_USERNAME }}//nodejsgitactions:v${{ github.run_number }}
+            ${{ secrets.DOCKER_USERNAME }}/nodejsgitactions:v${{ github.run_number }}
 
 
 
