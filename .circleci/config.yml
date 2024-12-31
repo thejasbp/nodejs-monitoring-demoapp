@@ -58,7 +58,7 @@ jobs:
           name: Build Docker Image
           command: | 
             echo $registry_pass | docker login -u $registry_user --password-stdin
-            docker build -t ${IMAGE_NAME}:${IMAGE_TAG} .
+            docker build -t $IMAGE_NAME:$IMAGE_TAG .
 
   push:
     executor: docker-executor
