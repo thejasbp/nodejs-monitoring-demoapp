@@ -1,37 +1,127 @@
-# This config was automatically generated from your source code
-# Stacks detected: cicd:github-actions:.github/workflows,deps:node:src
 version: 2.1
-orbs:
-  node: circleci/node@5
-jobs:
-  test-node:
-    # Install node dependencies and run tests
-    executor: node/default
-    working_directory: ~/project/src
-    steps:
-      - checkout:
-          path: ~/project
-      - node/install-packages:
-          pkg-manager: npm
-      - run:
-          name: Run tests
-          command: npm test --passWithNoTests
-  deploy:
-    # This is an example deploy job, not actually used by the workflow
+
+environment:
+  IMAGE_NAME="thejasbp/nodejscircleci"
+  IMAGE_TAG="v1"
+
+executors:
+  node-executor:
     docker:
-      - image: cimg/base:stable
+      - image: circleci/node:16.20-browsers
+    working_directory: ~/nodejs-demoapp
+
+  docker-executor:
+    docker:
+      - image: docker:20.10
+    working_directory: ~/nodejs-demoapp
+
+jobs:
+  lint:
+    executor: node-executor
     steps:
-      # Replace this with steps to deploy to users
+      - checkout
+      - restore_cache:
+          keys:
+            - npm-cache-{{ checksum "src/package-lock.json" }}
       - run:
-          name: deploy
-          command: '#e.g. ./deploy.sh'
+          name: Install Dependencies
+          command: make src/node_modules
+      - save_cache:
+          paths:
+            - src/node_modules
       - run:
-          name: found github actions config
-          command: ':'
+          name: Run Lint
+          command: make lint
+
+  test:
+    executor: node-executor
+    steps:
+      - checkout
+      - restore_cache:
+          keys:
+            - npm-cache-{{ checksum "src/package-lock.json" }}
+      - run:
+          name: Install Dependencies
+          command: make src/node_modules
+      - run:
+          name: Run Tests
+          command: make test
+
+  build:
+    executor: docker-executor
+    steps:
+      - checkout
+      - setup_remote_docker:
+          docker_layer_caching: true
+      - run:
+          name: Build Docker Image
+          command: | 
+            docker login -u $registry_user -p $registry_pass
+            docker build -t ${IMAGE_NAME}:${IMAGE_TAG} .
+
+  push:
+    executor: docker-executor
+    steps:
+      - checkout
+      - setup_remote_docker:
+          docker_layer_caching: true
+      - run:
+          name: Push Docker Image
+          command: |
+            docker login -u $registry_user -p $registry_pass
+            docker push ${IMAGE_NAME}:${IMAGE_TAG}
+
 workflows:
-  build-and-test:
+  ci-workflow:
     jobs:
-      - test-node
-    # - deploy:
-    #     requires:
-    #       - test-node
+      - lint
+      - test:
+          requires:
+            - lint
+      - build:
+          requires:
+            - test
+      - push:
+          requires:
+            - build
+
+
+
+
+# # This config was automatically generated from your source code
+# # Stacks detected: cicd:github-actions:.github/workflows,deps:node:src
+# version: 2.1
+# orbs:
+#   node: circleci/node@5
+# jobs:
+#   test-node:
+#     # Install node dependencies and run tests
+#     executor: node/default
+#     working_directory: ~/project/src
+#     steps:
+#       - checkout:
+#           path: ~/project
+#       - node/install-packages:
+#           pkg-manager: npm
+#       - run:
+#           name: Run tests
+#           command: npm test --passWithNoTests
+#   deploy:
+#     # This is an example deploy job, not actually used by the workflow
+#     docker:
+#       - image: cimg/base:stable
+#     steps:
+#       # Replace this with steps to deploy to users
+#       - run:
+#           name: deploy
+#           command: '#e.g. ./deploy.sh'
+#       - run:
+#           name: found github actions config
+#           command: ':'
+# workflows:
+#   build-and-test:
+#     jobs:
+#       - test-node
+#     # - deploy:
+#     #     requires:
+#     #       - test-node
