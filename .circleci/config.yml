@@ -50,13 +50,16 @@ jobs:
 
   build:
     executor: docker-executor
+    environment:
+      IMAGE_NAME="thejasbp/nodejscircleci"
+      IMAGE_TAG="v1"
     steps:
       - checkout
       - setup_remote_docker:
           docker_layer_caching: true
-      - run:
-          name: Debug Image Variables
-          command: echo IMAGE_NAME="$IMAGE_NAME", IMAGE_TAG="$IMAGE_TAG"
+      # - run:
+      #     name: Debug Image Variables
+      #     command: echo IMAGE_NAME="$IMAGE_NAME", IMAGE_TAG="$IMAGE_TAG"
     
       - run:
           name: Docker Login
