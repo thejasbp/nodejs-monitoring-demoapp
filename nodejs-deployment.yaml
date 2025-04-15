@@ -1,0 +1,21 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: nodejsweb
+  labels:
+    app: nodejsweb
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: nodejsweb
+  template:
+    metadata:
+      labels:
+        app: nodejsweb
+    spec:
+      containers:
+      - name: nodejsweb
+        image: thejasbp/nodejsbda:c1
+        ports:
+        - containerPort: 3000
